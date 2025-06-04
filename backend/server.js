@@ -2,7 +2,8 @@ const http = require('http');
 const WebSocket = require('ws');
 const fs = require('fs');
 const path = require('path');
-const cors = require('cors'); 
+const cors = require('cors');
+const express = require('express'); 
 
 const app = express(); 
 const server = http.createServer(app);
@@ -30,28 +31,6 @@ app.get('/favicon.ico', (req, res) => {
         }
     });
 });
-
-// Remove o código manual de leitura de arquivos que foi substituído pelo express.static
-// const server = http.createServer((req, res) => {
-//     const filePath = req.url === '/' ? './frontend/index.html' : `./frontend${req.url}`;
-//     const ext = path.extname(filePath);
-//     const contentTypes = {
-//         '.html': 'text/html',
-//         '.js': 'text/javascript',
-//         '.css': 'text/css',
-//     };
-//     fs.readFile(filePath, (err, content) => {
-//         if (err) {
-//             res.writeHead(404);
-//             res.end('Arquivo não encontrado');
-//         } else {
-//             res.writeHead(200, { 'Content-Type': contentTypes[ext] || 'text/plain' });
-//             res.end(content);
-//         }
-//     });
-// });
-// --- FIM SERVIR ARQUIVOS ESTÁTICOS ---
-
 
 const jogadores = new Map();
 const pontuacoes = {};
