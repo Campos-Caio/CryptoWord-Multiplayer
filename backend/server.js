@@ -2,28 +2,18 @@ const http = require('http');
 const WebSocket = require('ws');
 const fs = require('fs');
 const path = require('path');
-const cors = require('cors'); // Importar o módulo CORS
+const cors = require('cors'); 
 
-const app = require('express')(); // Usar Express para simplificar o servidor HTTP
+const app = express(); 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-// --- CONFIGURAÇÃO CORS ---
-// Adicione o middleware CORS ao seu aplicativo Express
-// '*' permite qualquer origem, o que é útil para depuração,
-// mas em produção, é melhor especificar a URL exata do seu frontend.
-// Ex: origin: 'https://cryptoword-multiplayer.onrender.com'
 app.use(cors({
     origin: '*', // Permite qualquer origem. Para produção, mude para a URL do seu frontend.
     methods: ['GET', 'POST'], // Métodos HTTP permitidos
     credentials: true // Se você usar cookies ou credenciais
 }));
-// --- FIM CONFIGURAÇÃO CORS ---
 
-// --- SERVIR ARQUIVOS ESTÁTICOS ---
-// Use o Express para servir arquivos estáticos de forma mais robusta.
-// O 'path.join(__dirname, '/'))' garante que ele servirá arquivos da raiz do repositório
-// onde o server.js está.
 app.use(express.static(path.join(__dirname, ''))); 
 
 // Adicione uma rota para o index.html, caso alguém acesse a raiz
