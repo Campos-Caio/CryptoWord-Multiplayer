@@ -2,27 +2,66 @@ const http = require('http');
 const WebSocket = require('ws');
 const fs = require('fs');
 const path = require('path');
+const cors = require('cors'); // Importar o módulo CORS
 
-const server = http.createServer((req, res) => {
-    const filePath = req.url === '/' ? './frontend/index.html' : `./frontend${req.url}`;
-    const ext = path.extname(filePath);
-    const contentTypes = {
-        '.html': 'text/html',
-        '.js': 'text/javascript',
-        '.css': 'text/css',
-    };
-    fs.readFile(filePath, (err, content) => {
+const app = require('express')(); // Usar Express para simplificar o servidor HTTP
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
+// --- CONFIGURAÇÃO CORS ---
+// Adicione o middleware CORS ao seu aplicativo Express
+// '*' permite qualquer origem, o que é útil para depuração,
+// mas em produção, é melhor especificar a URL exata do seu frontend.
+// Ex: origin: 'https://cryptoword-multiplayer.onrender.com'
+app.use(cors({
+    origin: '*', // Permite qualquer origem. Para produção, mude para a URL do seu frontend.
+    methods: ['GET', 'POST'], // Métodos HTTP permitidos
+    credentials: true // Se você usar cookies ou credenciais
+}));
+// --- FIM CONFIGURAÇÃO CORS ---
+
+// --- SERVIR ARQUIVOS ESTÁTICOS ---
+// Use o Express para servir arquivos estáticos de forma mais robusta.
+// O 'path.join(__dirname, '/'))' garante que ele servirá arquivos da raiz do repositório
+// onde o server.js está.
+app.use(express.static(path.join(__dirname, ''))); 
+
+// Adicione uma rota para o index.html, caso alguém acesse a raiz
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Tratamento específico para favicon.ico (evita 404 no console)
+app.get('/favicon.ico', (req, res) => {
+    res.sendFile(path.join(__dirname, 'favicon.ico'), (err) => {
         if (err) {
-            res.writeHead(404);
-            res.end('Arquivo não encontrado');
-        } else {
-            res.writeHead(200, { 'Content-Type': contentTypes[ext] || 'text/plain' });
-            res.end(content);
+            // Se o favicon não existir, retorne 204 No Content
+            res.status(204).end(); 
         }
     });
 });
 
-const wss = new WebSocket.Server({ server });
+// Remove o código manual de leitura de arquivos que foi substituído pelo express.static
+// const server = http.createServer((req, res) => {
+//     const filePath = req.url === '/' ? './frontend/index.html' : `./frontend${req.url}`;
+//     const ext = path.extname(filePath);
+//     const contentTypes = {
+//         '.html': 'text/html',
+//         '.js': 'text/javascript',
+//         '.css': 'text/css',
+//     };
+//     fs.readFile(filePath, (err, content) => {
+//         if (err) {
+//             res.writeHead(404);
+//             res.end('Arquivo não encontrado');
+//         } else {
+//             res.writeHead(200, { 'Content-Type': contentTypes[ext] || 'text/plain' });
+//             res.end(content);
+//         }
+//     });
+// });
+// --- FIM SERVIR ARQUIVOS ESTÁTICOS ---
+
 
 const jogadores = new Map();
 const pontuacoes = {};

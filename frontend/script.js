@@ -19,7 +19,16 @@ const leaveGameButton = document.getElementById('leave-game-button'); // Novo bo
 
 // Estado do cliente
 let username = '';
-const socket = new WebSocket(`ws://${location.host}`);
+
+// --- ALTERAÇÃO AQUI: Conexão WebSocket para ambiente de produção (HTTPS/WSS) ---
+// Se a página for carregada via HTTPS, o navegador forçará WSS para o WebSocket
+// Se for local (localhost), usará WS
+const SOCKET_PROTOCOL = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+const SOCKET_HOST = window.location.host; // Usa o mesmo host da página atual (ex: cryptoword-multiplayer.onrender.com)
+
+const socket = new WebSocket(`${SOCKET_PROTOCOL}${SOCKET_HOST}`);
+// -----------------------------------------------------------------------------
+
 let cellsData = []; // Armazena dados das células do grid: { x, y, letter, element }
 let selectedPath = []; // Armazena células selecionadas: { x, y, letter, element }
 let gameWords = []; // Armazena as palavras do jogo atual para a exibição do cliente
