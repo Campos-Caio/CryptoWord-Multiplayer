@@ -1,0 +1,482 @@
+/* --- Variáveis de Cores Crypto Neon --- */
+:root {
+    --neon-purple: #8A2BE2; /* Azul violeta / Roxo neon */
+    --neon-green: #39FF14;  /* Verde neon */
+    --neon-blue: #00CFFF;   /* Azul neon (para seleção) */
+    --dark-bg: #0A0A14;     /* Fundo muito escuro (mais azulado) */
+    --dark-card-bg: #1A0F2B;/* Fundo de card (mantido roxo escuro) */
+    --border-color: #332B4F;/* Borda sutil */
+    --text-color: #F0F6FC;  /* Cor do texto principal */
+    --highlight-text: #E0E0E0; /* Texto mais claro */
+    --error-red: #FF4747;   /* Vermelho para erros (mais vibrante) */
+    --info-blue-bg: #293E6B; /* Azul para informações (fundo) */
+    --success-green-bg: #1C4A34; /* Verde para sucesso (fundo) */
+
+    --font-primary: 'Segoe UI', 'Roboto', sans-serif;
+    --transition-speed: 0.3s;
+}
+
+/* --- Reset Básico e Estilos Globais --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--dark-bg);
+    color: var(--text-color);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+h1, h3 {
+    color: var(--neon-purple);
+    text-shadow: 0 0 5px var(--neon-purple);
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h3 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+
+button {
+    font-family: var(--font-primary);
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+input[type="text"] {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--dark-bg);
+    color: var(--text-color);
+    font-size: 1em;
+    box-shadow: inset 0 0 3px rgba(0,0,0,0.4);
+    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: var(--neon-green);
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5), 0 0 8px var(--neon-green);
+}
+
+.screen {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+    position: absolute; /* Para transições suaves */
+    top: 0;
+    left: 0;
+}
+
+.screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none; /* Impede interação quando escondido */
+}
+
+
+/* --- Tela de Lobby --- */
+#lobby-screen .lobby-content {
+    max-width: 700px;
+    width: 100%;
+    padding: 30px;
+    background-color: var(--dark-card-bg);
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), 0 0 10px var(--neon-purple);
+    text-align: center;
+}
+
+.rules-section {
+    background-color: rgba(0,0,0,0.2); /* Fundo mais sutil */
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 25px auto;
+    max-width: 550px;
+    text-align: left;
+}
+
+.rules-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.rules-section li {
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: var(--highlight-text);
+    padding-left: 25px;
+    position: relative;
+}
+
+.rules-section li::before {
+    content: attr(data-rule-number) "."; /* Usar data attribute para números se dinâmico */
+    content: "✔"; /* Ou um ícone */
+    color: var(--neon-green);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+#lobby-screen .input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+#lobby-screen label {
+    font-size: 1.1em;
+    color: var(--highlight-text);
+}
+
+#nickname-input {
+    width: 80%;
+    max-width: 350px;
+    font-size: 1.1em;
+}
+
+#join-game-button {
+    background-color: var(--neon-green);
+    color: var(--dark-bg);
+    font-size: 1.2em;
+    padding: 12px 30px;
+}
+#join-game-button:hover {
+    background-color: #2AE010; /* Verde mais claro no hover */
+}
+
+
+/* --- Tela de Jogo --- */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 15px;
+}
+
+.game-header {
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+.info-panel {
+    display: flex;
+    justify-content: space-around; /* Mais espaçado */
+    align-items: center;
+    font-size: 1.1em;
+    flex-wrap: wrap; /* Added for responsiveness */
+    gap: 10px; /* Added for spacing on wrap */
+}
+.info-panel > div, .info-panel > button { /* Apply styles to buttons in info-panel as well */
+    background-color: rgba(0,0,0,0.15);
+    padding: 8px 15px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+.main-content {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* Permite quebra em telas menores */
+    justify-content: center; /* Centraliza conteúdo em telas menores */
+}
+
+#jogadores-conectados-panel,
+#word-list-panel { /* Aplicado a ambos os painéis laterais */
+    flex: 1;
+    min-width: 220px;
+    max-width: 280px; /* Um pouco menor para caber mais facilmente */
+    background-color: var(--dark-card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    align-self: flex-start; /* Alinha ao topo */
+    margin-bottom: 20px; /* Espaço entre os painéis em telas menores */
+}
+
+
+#lista-jogadores,
+#word-list {
+    list-style: none;
+    padding: 0;
+}
+
+#lista-jogadores li,
+#word-list li {
+    background-color: var(--dark-bg);
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    font-size: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color var(--transition-speed);
+}
+#lista-jogadores li:hover {
+    background-color: var(--neon-purple);
+    color: var(--text-color);
+}
+
+/* Estilo para palavras encontradas na lista */
+#word-list li.found-word {
+    text-decoration: line-through;
+    color: var(--neon-green);
+    background-color: rgba(57, 255, 20, 0.1); /* Um verde bem suave */
+    border-color: var(--neon-green);
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+#game-area {
+    flex: 2; /* Ocupa mais espaço */
+    min-width: 300px; /* Garante que a área de jogo não fique muito pequena */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, clamp(25px, 3.5vw, 40px)); /* Responsivo */
+    grid-template-rows: repeat(12, clamp(25px, 3.5vw, 40px));     /* Responsivo */
+    gap: 4px;
+    justify-content: center;
+    margin-bottom: 20px; /* Espaço antes dos controles */
+    border: 2px solid var(--border-color);
+    padding: 5px;
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.cell {
+    width: 100%; /* Ocupa todo o espaço da célula do grid */
+    height: 100%;
+    background-color: var(--dark-card-bg);
+    color: var(--highlight-text);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: clamp(0.8em, 2vw, 1.2em); /* Responsivo */
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none; /* Impede seleção de texto na célula */
+    transition: background-color var(--transition-speed) ease, transform 0.1s ease, box-shadow var(--transition-speed) ease;
+}
+
+.cell:hover {
+    background-color: var(--neon-purple);
+    transform: scale(1.05);
+}
+
+.cell.selected {
+    background-color: var(--neon-blue); /* Cor para seleção temporária */
+    color: var(--dark-bg);
+    box-shadow: 0 0 8px var(--neon-blue);
+    outline: 2px solid var(--neon-blue);
+    transform: scale(1.1);
+}
+
+.cell.found { /* Para palavras encontradas permanentemente */
+    background-color: var(--neon-green);
+    color: var(--dark-bg);
+    box-shadow: 0 0 10px var(--neon-green);
+    border-color: var(--neon-green);
+    transform: scale(1.05);
+    animation: pulseFound 0.6s ease-out;
+}
+
+@keyframes pulseFound {
+    0% { transform: scale(1.05); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1.05); }
+}
+
+.selection-controls {
+    margin-top: 15px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.selection-controls span {
+    font-size: 1.1em;
+    color: var(--highlight-text);
+}
+
+#submit-selection-button {
+    background-color: var(--neon-green);
+    color: var(--dark-bg);
+}
+#submit-selection-button:hover {
+    background-color: #2AE010;
+}
+
+#clear-selection-button {
+    background-color: var(--error-red);
+    color: var(--text-color);
+}
+#clear-selection-button:hover {
+    background-color: #C0392B; /* Vermelho mais escuro no hover */
+}
+
+/* Style for the "Leave Room" button */
+.leave-button {
+    background-color: #e74c3c; /* Red color */
+    color: white;
+    font-size: 0.9em; /* Slightly smaller font */
+    padding: 8px 15px; /* Adjust padding */
+}
+
+.leave-button:hover {
+    background-color: #c0392b; /* Darker red on hover */
+}
+
+/* --- Mensagens de Feedback --- */
+.message { /* Para lobby e contagem */
+    font-size: 1.1em;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+}
+.message.hidden { display: none; }
+
+.countdown-message {
+    color: var(--neon-green);
+    font-weight: bold;
+    font-size: 1.3em;
+    animation: pulseCountdown 1s infinite alternate;
+}
+@keyframes pulseCountdown {
+    from { opacity: 0.7; transform: scale(1); }
+    to { opacity: 1; transform: scale(1.05); }
+}
+
+.game-feedback { /* Para mensagens no jogo */
+    min-height: 2em; /* Evita que layout pule */
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    transition: opacity var(--transition-speed), background-color var(--transition-speed);
+    opacity: 0; /* Começa invisível */
+}
+
+.game-feedback.visible {
+    opacity: 1;
+}
+
+.game-feedback.success-message {
+    background-color: var(--success-green-bg);
+    color: var(--neon-green);
+    border: 1px solid var(--neon-green);
+}
+
+.game-feedback.error-message {
+    background-color: rgba(231, 76, 60, 0.3); /* Fundo para erro */
+    color: var(--error-red);
+    border: 1px solid var(--error-red);
+}
+
+.game-feedback.info-message {
+    background-color: var(--info-blue-bg);
+    color: var(--neon-blue);
+    border: 1px solid var(--neon-blue);
+}
+
+/* --- Classes de Erro/Sucesso para Mensagens Gerais --- */
+.error-message { color: var(--error-red); }
+.success-message { color: var(--neon-green); }
+.info-message { color: var(--text-color); } /* Default */
+
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #jogadores-conectados-panel,
+    #word-list-panel,
+    #game-area {
+        max-width: 95%; /* Ocupa mais largura em telas menores */
+        width: 100%;
+    }
+
+    .grid {
+        grid-template-columns: repeat(12, minmax(20px, 1fr));
+        grid-template-rows: repeat(12, minmax(20px, 1fr));
+        gap: 2px;
+    }
+
+    .cell {
+        font-size: clamp(0.7em, 3vw, 1em);
+    }
+
+    .info-panel {
+        justify-content: center; /* Center items when wrapped */
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8em;
+    }
+
+    .rules-section {
+        padding: 15px;
+    }
+
+    #nickname-input {
+        width: 95%;
+    }
+
+    .info-panel {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

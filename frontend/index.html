@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caça-Palavras Crypto</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="lobby-screen" class="screen">
+    <div class="lobby-content">
+      <h1>Bem-vindo ao CryptoWord Multiplayer!</h1>
+
+      <div class="rules-section">
+        <h3>Regras do Jogo:</h3>
+        <ul>
+          <li>1. Escolha seu nickname e conecte-se.</li>
+          <li>2. Aguarde o mínimo de 2 jogadores para iniciar.</li>
+          <li>3. Clique nas letras no grid para formar palavras.</li>
+          <li>4. As letras devem ser adjacentes (horizontal/vertical).</li>
+          <li>5. Envie a palavra selecionada para pontuar.</li>
+          <li>6. Encontre todas as palavras para vencer a rodada!</li>
+        </ul>
+      </div>
+
+      <div class="input-group">
+        <label for="nickname-input">Seu Nickname:</label>
+        <input type="text" id="nickname-input" placeholder="Digite seu nome..." maxlength="15" />
+        <button id="join-game-button">Entrar no Jogo</button>
+      </div>
+      <p id="lobby-message" class="message"></p>
+      <p id="countdown-display" class="message countdown-message hidden"></p>
+    </div>
+  </div>
+
+  <div id="game-screen" class="screen hidden">
+    <div class="container">
+      <header class="game-header">
+        <h1>CryptoWord Multiplayer</h1>
+        <div class="info-panel">
+          <div><strong>Jogador:</strong> <span id="username-display"></span></div>
+          <div><strong>Pontuação:</strong> <span id="pontuacao">0</span></div>
+          <button id="leave-game-button" class="leave-button">Sair da Sala</button>
+        </div>
+      </header>
+
+      <div class="main-content">
+        <aside id="jogadores-conectados-panel">
+          <h3>Jogadores Online</h3>
+          <ul id="lista-jogadores"></ul>
+        </aside>
+
+        <main id="game-area">
+          <div id="grid" class="grid"></div>
+          <div class="selection-controls">
+            <span id="current-selection-text">Selecionado: </span>
+            <button id="submit-selection-button">Enviar Palavra</button>
+            <button id="clear-selection-button">Limpar Seleção</button>
+          </div>
+          <p id="feedback-message" class="game-feedback"></p>
+        </main>
+
+        <aside id="word-list-panel">
+          <h3>Palavras para Encontrar:</h3>
+          <ul id="word-list">
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
